@@ -105,6 +105,7 @@ function sharethis_admin_settings() {
  * Implementation of hook_nodeapi().
  */
 function sharethis_nodeapi(&$node, $op, $teaser, $page) {
+GLOBAL $base_url;
   //drupal_set_message(t('node->nid: '.$node->nid.''));
   //drupal_set_message(t('node->path: '.$node->path.''));
   switch ($op) {
@@ -118,12 +119,11 @@ function sharethis_nodeapi(&$node, $op, $teaser, $page) {
                 $share++;
                 drupal_set_html_head(variable_get('sharethis_sharethis_this_code', 0));
               }
-
                if($node->path) {
             // customized for pages with node->path specified
             $node->content['sharethis_sharethis_this'] = array(
               '#value' => "<script language='javascript' type='text/javascript'>
-              SHARETHIS.addEntry({url: 'http://".$_SERVER['SERVER_NAME']. $base_path. $node->path."', title: '".$node->title."'}, {button:true} );
+              SHARETHIS.addEntry({url: '".$base_url. "/".$node->path."', title: '".$node->title."'}, {button:true} );
                 </script>",
              '#weight' => variable_get('sharethis_sharethis_weight', 0)
             );
@@ -133,19 +133,14 @@ function sharethis_nodeapi(&$node, $op, $teaser, $page) {
             // using the node id for the default display of nodes without a custom path
             $node->content['sharethis_sharethis_this'] = array(
               '#value' => "<script language='javascript' type='text/javascript'>
-              SHARETHIS.addEntry({url: 'http://".$_SERVER['SERVER_NAME']. $base_path. "node/". $node->nid."', title: '".$node->title."'}, {button:true} );
+              SHARETHIS.addEntry({url: '".$base_url. "/node/". $node->nid."', title: '".$node->title."'}, {button:true} );
                 </script>",
               '#weight' => variable_get('sharethis_sharethis_weight', 0)
             );
           }
-             
-              
-              
-              
-              
-            }
           }
-          break;
+        }
+        break;
       }
       break;
     }
@@ -155,7 +150,7 @@ function sharethis_nodeapi(&$node, $op, $teaser, $page) {
  * Implementation of hook_link().
  */
 function sharethis_link($type, $node = NULL, $teaser = FALSE) {
-  global $base_path;
+  global $base_url;
   //echo "<pre>";print_r($node);echo "</pre>";
   //drupal_set_message(t('node->nid: '.$node->nid.''));
   
@@ -173,7 +168,7 @@ function sharethis_link($type, $node = NULL, $teaser = FALSE) {
             // customized for pages with node->path specified
             $links['sharethis_sharethis_this'] = array(
               'title' => "<script language='javascript' type='text/javascript'>
-              SHARETHIS.addEntry({url: 'http://".$_SERVER['SERVER_NAME']. $base_path. $node->path."', title: '".$node->title."'}, {button:true} );
+              SHARETHIS.addEntry({url: '".$base_url. "/".$node->path."', title: '".$node->title."'}, {button:true} );
                 </script>",
               'html' => TRUE,
               'attributes' => array('id' => 'sharethis_'.$node->nid)
@@ -184,7 +179,7 @@ function sharethis_link($type, $node = NULL, $teaser = FALSE) {
             // using the node id for the default display of nodes without a custom path
             $links['sharethis_sharethis_this'] = array(
               'title' => "<script language='javascript' type='text/javascript'>
-              SHARETHIS.addEntry({url: 'http://".$_SERVER['SERVER_NAME']. $base_path. "node/". $node->nid."', title: '".$node->title."'}, {button:true} );
+              SHARETHIS.addEntry({url: '".$base_url. "/node/". $node->nid."', title: '".$node->title."'}, {button:true} );
                 </script>",
               'html' => TRUE,
               'attributes' => array('id' => 'sharethis_'.$node->nid)
