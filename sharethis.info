@@ -1,7 +1,3 @@
 name = ShareThis
 description = "Implements the ShareThis system created by Alex King into posts."
-core = 6.x
-version = "6.x-1.0"
-project = "sharethis"
-datestamp = "1201306070"
 package = Himerus Inc. Custom Modules
