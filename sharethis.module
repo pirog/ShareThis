@@ -40,8 +40,7 @@ function sharethis_admin_settings() {
   $form['sharethis_this_onoff']['sharethis_type'] = array(
     '#type' => 'radios',
     '#title' => t('Show ShareThis Interface'),
-    '#description' => t('Determine wether or not to show the ShareThis interface. Setting this feature 
-to "Disabled" will prevent the ShareThis links from appearing on your site.'),
+    '#description' => t('Determine wether or not to show the ShareThis interface. Setting this feature to "Disabled" will prevent the ShareThis links from appearing on your site.'),
     '#default_value' => variable_get('sharethis_type', 0),
     '#options' => $types
   );
@@ -49,18 +48,15 @@ to "Disabled" will prevent the ShareThis links from appearing on your site.'),
   $form['sharethis_this_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('ShareThis API Code (STAPI)'),
-    '#description' => t('The following javascript code can be modified to enhance the appearance of 
-your ShareThis popup, and to determine which Social Networking sites are displayed.'),
+    '#description' => t('The following javascript code can be modified to enhance the appearance of your ShareThis popup, and to determine which Social Networking sites are displayed.'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE
   );
-  $sharethis_code = '<script type="text/javascript" 
-src="http://w.sharethis.com/widget/?tabs=web&amp;charset=utf-8&amp;style=default&amp;publisher=79afd7f6-da74-4c6e-9bd9-3c199659901d&amp;headerbg=%2337a037"></script>';
+  $sharethis_code = '<script type="text/javascript" src="http://w.sharethis.com/widget/?tabs=web&amp;charset=utf-8&amp;style=default&amp;publisher=79afd7f6-da74-4c6e-9bd9-3c199659901d&amp;headerbg=%2337a037"></script>';
   $form['sharethis_this_settings']['sharethis_sharethis_this_code'] = array(
     '#type' => 'textarea',
     '#title' => t('Share This Code'),
-    '#description' => t('Javascript code provided by Share This. You can generate your own code 
-!here.', array('!here' => l(t('here'), 'http://sharethis.com/publisher?type=stapi'))),
+    '#description' => t('Javascript code provided by Share This. You can generate your own code !here.', array('!here' => l(t('here'), 'http://sharethis.com/publisher?type=stapi'))),
     '#default_value' => variable_get('sharethis_sharethis_this_code', $sharethis_code)
   );
   $form['where_to_sharethis_sharethis_this'] = array( // Where to Share
@@ -92,8 +88,7 @@ src="http://w.sharethis.com/widget/?tabs=web&amp;charset=utf-8&amp;style=default
   $form['where_to_sharethis_sharethis_this']['sharethis_teaser'] = array(
     '#type' => 'radios',
     '#title' => t('Show ShareThis in Teasers?'),
-    '#description' => t('If enabled, the ShareThis links will appear in teasers, if disabled, they 
-will only appear on the full node page.'),
+    '#description' => t('If enabled, the ShareThis links will appear in teasers, if disabled, they will only appear on the full node page.'),
     '#default_value' => variable_get('sharethis_teaser', 1),
     '#options' => $teasertypes
   );
@@ -125,8 +120,7 @@ GLOBAL $base_url;
           if(!$teaser || variable_get('sharethis_teaser', 1)) {
           if (variable_get('sharethis_sharethis_this_where', 0) == '1') {
             static $share = 0;
-            if (_sharethis_sharethis_this_show($node->type, $node->nid) && user_access('use share 
-this')) {
+            if (_sharethis_sharethis_this_show($node->type, $node->nid) && user_access('use share this')) {
               if ($share == '0') {
                 $share++;
                 drupal_set_html_head(variable_get('sharethis_sharethis_this_code', 0));
@@ -135,8 +129,7 @@ this')) {
             // customized for pages with node->path specified
             $node->content['sharethis_sharethis_this'] = array(
               '#value' => "<script language='javascript' type='text/javascript'>
-              SHARETHIS.addEntry({url: '".$base_url. "/".$node->path."', title: '".$node->title."'}, 
-{button:true} );
+              SHARETHIS.addEntry({url: '".$base_url. "/".$node->path."', title: '".$node->title."'}, {button:true} );
                 </script>",
              '#weight' => variable_get('sharethis_sharethis_weight', 0)
             );
@@ -146,8 +139,7 @@ this')) {
             // using the node id for the default display of nodes without a custom path
             $node->content['sharethis_sharethis_this'] = array(
               '#value' => "<script language='javascript' type='text/javascript'>
-              SHARETHIS.addEntry({url: '".$base_url. "/node/". $node->nid."', title: 
-'".$node->title."'}, {button:true} );
+              SHARETHIS.addEntry({url: '".$base_url. "/node/". $node->nid."', title: '".$node->title."'}, {button:true} );
                 </script>",
               '#weight' => variable_get('sharethis_sharethis_weight', 0)
             );
@@ -171,8 +163,7 @@ function sharethis_link($type, $node = NULL, $teaser = FALSE) {
       if(!$teaser || variable_get('sharethis_teaser', 1)) {
         if (variable_get('sharethis_sharethis_this_where', 0) == '0') {
           static $share = 0;
-          if (_sharethis_sharethis_this_show($node->type, $node->nid) && user_access('use share 
-this')) {
+          if (_sharethis_sharethis_this_show($node->type, $node->nid) && user_access('use share this')) {
             if ($share == '0') {
               $share++;
               drupal_set_html_head(variable_get('sharethis_sharethis_this_code', 0));
@@ -181,8 +172,7 @@ this')) {
               // customized for pages with node->path specified
               $links['sharethis_sharethis_this'] = array(
                 'title' => "<script language='javascript' type='text/javascript'>
-                SHARETHIS.addEntry({url: '".$base_url. "/".$node->path."', title: '".$node->title."'}, 
-{button:true} );
+                SHARETHIS.addEntry({url: '".$base_url. "/".$node->path."', title: '".$node->title."'}, {button:true} );
                   </script>",
                 'html' => TRUE,
                 'attributes' => array('id' => 'sharethis_'.$node->nid)
@@ -193,8 +183,7 @@ this')) {
               // using the node id for the default display of nodes without a custom path
               $links['sharethis_sharethis_this'] = array(
                 'title' => "<script language='javascript' type='text/javascript'>
-                SHARETHIS.addEntry({url: '".$base_url. "/node/". $node->nid."', title: 
-'".$node->title."'}, {button:true} );
+                SHARETHIS.addEntry({url: '".$base_url. "/node/". $node->nid."', title: '".$node->title."'}, {button:true} );
                   </script>",
                 'html' => TRUE,
                 'attributes' => array('id' => 'sharethis_'.$node->nid)
@@ -218,8 +207,7 @@ function _sharethis_sharethis_this_show($type, $nid) {
   if (module_exists('taxonomy')) {
     $terms = taxonomy_node_get_terms($nid);
     foreach ($terms as $term) {
-      $category_type = in_array($term->tid, variable_get('sharethis_sharethis_this_category_types', 
-array()), FALSE);
+      $category_type = in_array($term->tid, variable_get('sharethis_sharethis_this_category_types', array()), FALSE);
     }
   }
   if ($node_type || $category_type) {
