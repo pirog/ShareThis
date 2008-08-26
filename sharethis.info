@@ -1,7 +1,10 @@
 name = ShareThis
 description = "Implements the ShareThis system created by Alex King into posts."
-core = 6.x
-version = "6.x-1.0"
+package = Custom Modules by Himerus
+
+; Information added by drupal.org packaging script on 2008-03-11
+version = "6.x-1.2-1"
+core = "6.x"
 project = "sharethis"
-datestamp = "1201306070"
-package = Himerus Inc. Custom Modules
+datestamp = "1205212810"
+
