@@ -3,7 +3,9 @@
  * Implementation of hook_init().
  */
 function sharethis_init() {
-  drupal_set_html_head(variable_get('sharethis_sharethis_this_code'));
+  if(drupal_set_html_head(variable_get('sharethis_sharethis_this_code', 0)) != 0) {
+    drupal_set_html_head(variable_get('sharethis_sharethis_this_code', 0));
+  }
 }
 /**
  * Implementation of hook_perm().
