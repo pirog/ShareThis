@@ -3,7 +3,7 @@
  * Implementation of hook_init().
  */
 function sharethis_init() {
-  if(drupal_set_html_head(variable_get('sharethis_sharethis_this_code', 0)) != 0) {
+  if(variable_get('sharethis_sharethis_this_code', 0) != 0 && variable_get('sharethis_this_onoff', 0) != 0) {
     drupal_set_html_head(variable_get('sharethis_sharethis_this_code', 0));
   }
 }
