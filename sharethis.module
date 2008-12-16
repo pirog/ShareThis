@@ -164,12 +164,17 @@ function sharethis_link($type, $node = NULL, $teaser = FALSE) {
 function _sharethis_sharethis_this_show($type, $nid) {
   // Check to see if the node type is to display the ShareThis.
   $node_type = in_array($type, variable_get('sharethis_sharethis_this_node_types', array()), TRUE);
+  $category_type = FALSE;
 
   // Check to see if Taxonomy is enabled and the node has a vocabulary.
   if (module_exists('taxonomy') && isset($node->vid)) {
     $terms = taxonomy_node_get_terms($nid);
     foreach ($terms as $term) {
       $category_type = in_array($term->tid, variable_get('sharethis_sharethis_this_category_types', array()), FALSE);
+      if ($category_type) {
+        // Stop looping because we found that the category is to be displayed.
+        break;
+      }
     }
   }
 
