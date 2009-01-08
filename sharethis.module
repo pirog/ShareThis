@@ -119,15 +119,14 @@ function sharethis_nodeapi(& $node, $op, $teaser, $page) {
       if (!$teaser || variable_get('sharethis_teaser', 1)) {
         if (variable_get('sharethis_sharethis_this_where', 'links') == 'nodes') {
           if (_sharethis_sharethis_this_show($node->type, $node->nid) && user_access('use share this')) {
-            if (sharethis_add_js()) {
-              $sharethis = sharethis_get_js($node->title, array(
-                'url' => url('node/'. $node->nid, array('absolute' => TRUE)),
-              ));
-              $node->content['sharethis_sharethis_this'] = array(
-                '#value' => $sharethis,
-                '#weight' => variable_get('sharethis_sharethis_weight', 0),
-              );
-            }
+            // Create the ShareThis element.
+            $sharethis = theme('sharethis', $node->title, array(
+              'url' => url('node/'. $node->nid, array('absolute' => TRUE)),
+            ));
+            $node->content['sharethis_sharethis_this'] = array(
+              '#value' => $sharethis,
+              '#weight' => variable_get('sharethis_sharethis_weight', 0),
+            );
           }
         }
       }
@@ -142,17 +141,16 @@ function sharethis_link($type, $node = NULL, $teaser = FALSE) {
   if (!$teaser || variable_get('sharethis_teaser', 1)) {
     if (variable_get('sharethis_sharethis_this_where', 'links') == 'links') {
       if (_sharethis_sharethis_this_show($node->type, $node->nid) && user_access('use share this')) {
-        if (sharethis_add_js()) {
-          $sharethis = sharethis_get_js($node->title, array(
-            'url' => url('node/'. $node->nid, array('absolute' => TRUE)),
-          ));
-          $links['sharethis_sharethis_this'] = array(
-            'title' => $sharethis,
-            'html' => TRUE,
-            'attributes' => array('id' => 'sharethis_'. $node->nid),
-          );
-          return $links;
-        }
+        // Create the ShareThis element.
+        $sharethis = theme('sharethis', $node->title, array(
+          'url' => url('node/'. $node->nid, array('absolute' => TRUE)),
+        ));
+        $links['sharethis_sharethis_this'] = array(
+          'title' => $sharethis,
+          'html' => TRUE,
+          'attributes' => array('id' => 'sharethis_'. $node->nid),
+        );
+        return $links;
       }
     }
   }
@@ -184,6 +182,9 @@ function _sharethis_sharethis_this_show($type, $nid) {
 /**
  * Adds the ShareThis JavaScript header code.
  *
+ * This is called from theme_sharethis, so there's no reason to call this
+ * function if you're using theme('sharethis').
+ *
  * @return
  *   Whether or not the code was added.
  */
@@ -200,11 +201,29 @@ function sharethis_add_js() {
 }
 
 /**
+ * Implementation of hook_theme().
+ */
+function sharethis_theme($existing, $type, $theme, $path) {
+  return array(
+    'sharethis' => array(
+      'arguments' => array('title' => NULL, 'options' => NULL),
+    ),
+  );
+}
+
+/**
  * Creates the complete script tag to create SHARETHIS elements.
  *
- * See http://sharethis.com/publisher?type=stapi for the options available.
+ * Since this is a theme function, themers can inject options into the ShareThis
+ * element. See http://sharethis.com/publisher?type=stapi for the options available.
  */
-function sharethis_get_js($title, $options = array()) {
+function theme_sharethis($title, $options = array()) {
+  // Be sure to add the ShareThis JavaScript.
+  sharethis_add_js();
+
+  // Send the title into the options array.
   $options['title'] = $title;
+
+  // Create the ShareThis entry.
   return "<script language='javascript' type='text/javascript'>SHARETHIS.addEntry(". drupal_to_js($options) . ', {button:true} );</script>';
 }
