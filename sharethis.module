@@ -120,7 +120,7 @@ function sharethis_nodeapi(& $node, $op, $teaser, $page) {
         if (variable_get('sharethis_sharethis_this_where', 'links') == 'nodes') {
           if (_sharethis_sharethis_this_show($node->type, $node->nid) && user_access('use share this')) {
             // Create the ShareThis element.
-            $sharethis = theme('sharethis', $node->title, array(
+            $sharethis = sharethis_add_js($node->title, array(
               'url' => url('node/'. $node->nid, array('absolute' => TRUE)),
             ));
             $node->content['sharethis_sharethis_this'] = array(
@@ -142,13 +142,12 @@ function sharethis_link($type, $node = NULL, $teaser = FALSE) {
     if (variable_get('sharethis_sharethis_this_where', 'links') == 'links') {
       if (_sharethis_sharethis_this_show($node->type, $node->nid) && user_access('use share this')) {
         // Create the ShareThis element.
-        $sharethis = theme('sharethis', $node->title, array(
+        $sharethis = sharethis_add_js($node->title, array(
           'url' => url('node/'. $node->nid, array('absolute' => TRUE)),
         ));
         $links['sharethis_sharethis_this'] = array(
           'title' => $sharethis,
           'html' => TRUE,
-          'attributes' => array('id' => 'sharethis_'. $node->nid),
         );
         return $links;
       }
@@ -180,50 +179,65 @@ function _sharethis_sharethis_this_show($type, $nid) {
 }
 
 /**
- * Adds the ShareThis JavaScript header code.
+ * Creates a ShareThis element, as well as adds all required JavaScript to the page.
  *
- * This is called from theme_sharethis, so there's no reason to call this
- * function if you're using theme('sharethis').
- *
+ * @param $title
+ *   The title of the document that is to be shared.
+ * @param $options
+ *   See http://sharethis.com/developers/api/ for the options available.
+ * @param $element
+ *   See http://sharethis.com/developers/api/ for the element options available.
  * @return
- *   Whether or not the code was added.
+ *   Returns the HTML to be placed inline where the ShareThis element will be shown.
  */
-function sharethis_add_js() {
-  static $added = FALSE;
-  if ($added === FALSE) {
-    $code = variable_get('sharethis_sharethis_this_code', 0);
-    if (!empty($code)) {
-      drupal_set_html_head($code);
-      $added = TRUE;
-    }
+function sharethis_add_js($title, $options = array(), $element = array()) {
+	// Be sure to add the ShareThis header code only once.
+  static $sharethis_added = FALSE;
+  if ($sharethis_added === FALSE) {
+  	// Register the Drupal ShareThis behaviors and tell them the ShareThis API URL.
+    drupal_add_js(drupal_get_path('module', 'sharethis') . '/sharethis.js');
+    drupal_add_js(array('shareThisUrl' => sharethis_api_url()), 'setting');
+
+    // Flag that the JavaScript has been registered.
+    $sharethis_added = TRUE;
   }
-  return $added;
-}
 
-/**
- * Implementation of hook_theme().
- */
-function sharethis_theme($existing, $type, $theme, $path) {
-  return array(
-    'sharethis' => array(
-      'arguments' => array('title' => NULL, 'options' => NULL),
-    ),
-  );
-}
+  // Track the ShareThis index ID.
+	static $sharethis_id = 0;
 
-/**
- * Creates the complete script tag to create SHARETHIS elements.
- *
- * Since this is a theme function, themers can inject options into the ShareThis
- * element. See http://sharethis.com/publisher?type=stapi for the options available.
- */
-function theme_sharethis($title, $options = array()) {
-  // Be sure to add the ShareThis JavaScript.
-  sharethis_add_js();
-
-  // Send the title into the options array.
+  // Prepare the options by sending in the title, retrieve the ID and prepare the element.
   $options['title'] = $title;
+  $id = 'sharethis_'. $sharethis_id++;
+  if (empty($element)) {
+  	$element = array('button' => FALSE);
+  }
+
+  // Create and add the settings.
+  $settings = array('shareThis' => array($id => array('id' => $id, 'options' => $options, 'element' => $element)));
+  drupal_add_js($settings, 'setting');
 
   // Create the ShareThis entry.
-  return "<script language='javascript' type='text/javascript'>SHARETHIS.addEntry(". drupal_to_js($options) . ', {button:true} );</script>';
+  return l(t('ShareThis'), '', array(
+    'attributes' => array('id' => $id),
+    'fragment' => $id,
+  ));
+}
+
+/**
+ * Retrieves the current ShareThis API URL without the <script> tags.
+ * @param $default
+ *   The script tag to use if the default doesn't exist.
+ * @return unknown_type
+ */
+function sharethis_api_url($default = '') {
+	static $cached = FALSE;
+	if ($cached) {
+	  return $cached;
+	}
+	$url = variable_get('sharethis_sharethis_this_code', $default);
+	$url = str_replace('<script type="text/javascript" src="', '', $url); // Remove beginning <script
+  $url = str_replace('"></script>', '', $url); // Remove end </script>
+  $url = str_replace('#', '?', $url); // # switches to ?
+  $url = str_replace('&amp;', '&', $url); // Replace &amp; with &
+  return $cached = $url;
 }
