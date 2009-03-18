@@ -7,28 +7,39 @@ Drupal.behaviors.shareThis = function() {
   // Check the kill-switch.
   if (Drupal.settings.shareThisEnabled != true) {
     // See if there are any actual elements to apply the ShareThis to.
-    if (Drupal.settings.shareThis) {
+    if (Drupal.settings.shareThisUrl) {
       // Process ShareThis after the API is loaded.
-      jQuery.getScript(Drupal.settings.shareThisUrl, function() {
-        for (shareThis in Drupal.settings.shareThis) {
-          // Retrieve the values.
-          var share = Drupal.settings.shareThis[shareThis];
-          var id = share.id;
-          var options = share.options;
-          var element = share.element;
-
-          // Create the entry and attach it to the link.
-          Drupal.settings.shareThis[shareThis] = SHARETHIS.addEntry(options, element);
-          Drupal.settings.shareThis[shareThis].attachButton($('#' + id).get(0));
-
-    	  // Insert the new button, hiding the original link.
-          $('#' + id).after(Drupal.settings.shareThis[shareThis].button).empty();
-
-          // ShareThis won't appear unless we mimic the original clicking element link.
-          $('#' + id + ' stbutton').click('Drupal.settings.shareThis[' + shareThis + '].share');
-    	}
+      jQuery.ajax({
+        type: "GET",
+        url: Drupal.settings.shareThisUrl,
+        dataType: "script",
+        cache: true,
+        success: function() {
+          // Say that the ShareThis API is now available and recall the behaviors.
+          Drupal.settings.shareThisEnabled = true;
+          Drupal.behaviors.shareThis();
+        }
       });
     }
-    Drupal.settings.shareThisEnabled = true;
   }
-}
+  else {
+    // Process each of the ShareThis links.
+    $('.sharethis-sharethis:not(.sharethis-processed)').each(function(index, element) {
+      // Obtain the element and construct the options.
+      element = $(element);
+      var options = {
+        'url': element.attr('href'),
+        'title': element.attr('title')
+      };
+
+      // Create the entry and attach it to the link.
+      var share = SHARETHIS.addEntry(options);
+      share.attachButton(element.get(0));
+
+      // State that the object was processed and deactivate the default click event.
+      element.addClass('sharethis-processed').click(function() {
+        return false;
+      });
+    });
+  }
+};
