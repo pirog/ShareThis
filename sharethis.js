@@ -15,6 +15,10 @@ Drupal.behaviors.shareThis = function() {
         dataType: "script",
         cache: true,
         success: function() {
+          // Prepare the ShareThis API.
+          SHARETHIS.toolbar = true;
+          SHARETHIS.onReady();
+
           // Say that the ShareThis API is now available and recall the behaviors.
           Drupal.settings.shareThisEnabled = true;
           Drupal.behaviors.shareThis();
