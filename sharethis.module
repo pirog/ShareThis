@@ -12,11 +12,11 @@
 function sharethis_help($path, $arg) {
   switch ($path) {
     case 'admin/help#sharethis':
-      $output = '<p>'. t('Provides functionality to interface with the <a href="@sharethis">ShareThis</a> web service.', array('@sharethis' => 'http://sharethis.com')) .'</p>';
+      $output = '<p>'. t('Provides functionality to interface with the <a href="@sharethis">ShareThis</a> web service to share data across different social networks.', array('@sharethis' => 'http://sharethis.com')) .'</p>';
       $output .= '<p>'. theme('sharethis', t('Drupal ShareThis Module'), 'http://drupal.org/project/sharethis') .'</p>';
       return $output;
     case 'admin/settings/sharethis':
-      return '<p>'. t('Below provides the settings for interfacing with the <a href="@sharethis">ShareThis</a> web service.', array('@sharethis' => 'http://sharethis.com')) .'</p>';
+      return '<p>'. t('Below provides the settings for interfacing with the <a href="@sharethis">ShareThis</a> web service to share data across different social networks.', array('@sharethis' => 'http://sharethis.com')) .'</p>';
   }
 }
 
@@ -24,7 +24,7 @@ function sharethis_help($path, $arg) {
  * Implementation of hook_perm().
  */
 function sharethis_perm() {
-  return array('administer share', 'use share this');
+  return array('administer sharethis', 'use sharethis');
 }
 
 /**
@@ -37,47 +37,11 @@ function sharethis_menu() {
     'description' => t('Administer settings related to the ShareThis web service.'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('sharethis_admin_settings'),
-    'access arguments' => array('administer share'),
+    'access arguments' => array('administer sharethis'),
     'type' => MENU_NORMAL_ITEM,
+    'file' => 'sharethis.admin.inc',
   );
   return $items;
-}
-
-/**
- * Menu callback; Settings administration.
- */
-function sharethis_admin_settings() {
-  $form['sharethis_sharethis_this_node_types'] = array(
-    '#type' => 'checkboxes',
-    '#title' => t('Node types'),
-    '#description' => t('Choose which node types to display the ShareThis button on.'),
-    '#default_value' => variable_get('sharethis_sharethis_this_node_types', array()),
-    '#options' => node_get_types('names'),
-  );
-  $form['sharethis_teaser'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display in teaser view'),
-    '#description' => t('If enabled, the ShareThis links will appear in node teasers. If disabled, they will only appear on the full node page.'),
-    '#default_value' => variable_get('sharethis_teaser', 1),
-  );
-  $form['sharethis_sharethis_this_where'] = array(
-    '#type' => 'select',
-    '#title' => t('Where to display'),
-    '#description' => t('Select where you would like the ShareThis link to appear.'),
-    '#default_value' => variable_get('sharethis_sharethis_this_where', 'links'),
-    '#options'=> array(
-      'links' => t('Links'),
-      'nodes' => t('Nodes'),
-    ),
-  );
-  $form['sharethis_sharethis_weight'] = array(
-    '#type' => 'weight',
-    '#delta' => 10,
-    '#description' => t('Only applies when node type display is selected.'),
-    '#title' => t('Weight'),
-    '#default_value' => variable_get('sharethis_sharethis_weight', 0),
-  );
-  return system_settings_form($form);
 }
 
 /**
@@ -86,7 +50,7 @@ function sharethis_admin_settings() {
 function sharethis_nodeapi(&$node, $op, $teaser, $page) {
   switch ($op) {
     case 'view':
-      if (user_access('use share this')) {
+      if (user_access('use sharethis')) {
         if (!$teaser || variable_get('sharethis_teaser', 1)) {
           if (variable_get('sharethis_sharethis_this_where', 'links') == 'nodes') {
             if (in_array($node->type, variable_get('sharethis_sharethis_this_node_types', array()), TRUE)) {
@@ -108,15 +72,22 @@ function sharethis_nodeapi(&$node, $op, $teaser, $page) {
  * Implementation of hook_link().
  */
 function sharethis_link($type, $node = NULL, $teaser = FALSE) {
-  if ($type == 'node' && user_access('use share this')) {
+  if ($type == 'node' && user_access('use sharethis')) {
     if (!$teaser || variable_get('sharethis_teaser', 1)) {
       if (variable_get('sharethis_sharethis_this_where', 'links') == 'links') {
         if (in_array($node->type, variable_get('sharethis_sharethis_this_node_types', array()), TRUE)) {
+          // Make sure the ShareThis JavaScript is made available.
+          sharethis_add_js();
+
           // Create the ShareThis element.
-          $sharethis = theme('sharethis', $node->title, url('node/'. $node->nid, array('absolute' => TRUE)));
-          $links['sharethis_sharethis_this'] = array(
-            'title' => $sharethis,
-            'html' => TRUE,
+          $links['sharethis_link'] = array(
+            'title' => t('ShareThis'),
+            'href' => url('node/'. $node->nid, array('absolute' => TRUE)),
+            'attributes' => array(
+              'class' => 'sharethis-link', // This is the class that is processed.
+              'title' => check_plain($node->title),
+              'rel' => 'nofollow',
+            ),
           );
           return $links;
         }
@@ -132,9 +103,18 @@ function sharethis_add_js() {
 	// Be sure to add the ShareThis header code only once.
   static $sharethis_added = FALSE;
   if ($sharethis_added === FALSE) {
-  	// Register the Drupal ShareThis behaviors and add the ShareThis URL.
-    drupal_add_js(drupal_get_path('module', 'sharethis') . '/sharethis.js');
-    drupal_add_js(array('shareThisUrl' => 'http://w.sharethis.com/button/sharethis.js#button=false'), 'setting');
+  	// Adds the ShareThis jQuery plugin as well as the related Drupal JavaScript behavior and CSS.
+  	$path = drupal_get_path('module', 'sharethis');
+    drupal_add_js($path . '/sharethis/jquery.sharethis.js');
+    drupal_add_js($path . '/sharethis.js');
+
+    // Add the ShareThis code if desired.
+    $code = variable_get('sharethis_code', '');
+    if (!empty($code)) {
+      $code = str_replace('<script type="text/javascript" src="', '', $code);
+      $code = str_replace('"></script>', '', $code);
+      drupal_add_js(array('sharethisUrl' => $code), 'setting');
+    }
 
     // Flag that the JavaScript has been registered.
     $sharethis_added = TRUE;
@@ -177,8 +157,9 @@ function theme_sharethis($title = NULL, $url = NULL) {
   return l(t('ShareThis'), $url, array(
     'absolute' => TRUE,
     'attributes' => array(
-      'class' => 'sharethis-sharethis stbutton stico_default',
+      'class' => 'sharethis-link',
       'title' => $title,
+      'rel' => 'nofollow',
     ),
   ));
 }
