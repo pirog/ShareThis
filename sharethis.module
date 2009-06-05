@@ -97,6 +97,29 @@ function sharethis_link($type, $node = NULL, $teaser = FALSE) {
 }
 
 /**
+ * Implementation of hook_block().
+ */
+function sharethis_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      $blocks['sharethis'] = array(
+        'info' => t('ShareThis'),
+      );
+      return $blocks;
+    break;
+    case 'view':
+      if ($delta == 'sharethis') {
+        return array(
+          'subject' => t('ShareThis'),
+          'content' => theme('sharethis', drupal_get_title(), $_GET['q']),
+          'cache' => BLOCK_NO_CACHE, // Don't cache it because it needs to add JavaScript.
+        );
+      }
+    break;
+  }
+}
+
+/**
  * Adds all required ShareThis JavaScript to the page.
  */
 function sharethis_add_js() {
