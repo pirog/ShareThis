@@ -163,3 +163,12 @@ function theme_sharethis($title = NULL, $url = NULL) {
     ),
   ));
 }
+
+/**
+ * Implementation of hook_views_api().
+ */
+function sharethis_views_api() {
+  return array(
+    'api' => 2,
+  );
+}
