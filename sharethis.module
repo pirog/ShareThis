@@ -24,7 +24,7 @@ function sharethis_help($path, $arg) {
  * Implementation of hook_perm().
  */
 function sharethis_perm() {
-  return array('administer sharethis', 'use sharethis');
+  return array('administer share', 'use share this');
 }
 
 /**
@@ -37,7 +37,7 @@ function sharethis_menu() {
     'description' => t('Administer settings related to the ShareThis web service.'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('sharethis_admin_settings'),
-    'access arguments' => array('administer sharethis'),
+    'access arguments' => array('administer share'),
     'type' => MENU_NORMAL_ITEM,
     'file' => 'sharethis.admin.inc',
   );
@@ -50,7 +50,7 @@ function sharethis_menu() {
 function sharethis_nodeapi(&$node, $op, $teaser, $page) {
   switch ($op) {
     case 'view':
-      if (user_access('use sharethis')) {
+      if (user_access('use share this')) {
         if (!$teaser || variable_get('sharethis_teaser', 1)) {
           if (variable_get('sharethis_sharethis_this_where', 'links') == 'nodes') {
             if (in_array($node->type, variable_get('sharethis_sharethis_this_node_types', array()), TRUE)) {
@@ -72,7 +72,7 @@ function sharethis_nodeapi(&$node, $op, $teaser, $page) {
  * Implementation of hook_link().
  */
 function sharethis_link($type, $node = NULL, $teaser = FALSE) {
-  if ($type == 'node' && user_access('use sharethis')) {
+  if ($type == 'node' && user_access('use share this')) {
     if (!$teaser || variable_get('sharethis_teaser', 1)) {
       if (variable_get('sharethis_sharethis_this_where', 'links') == 'links') {
         if (in_array($node->type, variable_get('sharethis_sharethis_this_node_types', array()), TRUE)) {
