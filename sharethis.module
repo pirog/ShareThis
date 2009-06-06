@@ -104,6 +104,7 @@ function sharethis_block($op = 'list', $delta = 0, $edit = array()) {
     case 'list':
       $blocks['sharethis'] = array(
         'info' => t('ShareThis'),
+        'cache' => BLOCK_NO_CACHE, // Don't cache it because it needs to add JavaScript.
       );
       return $blocks;
     break;
@@ -112,7 +113,6 @@ function sharethis_block($op = 'list', $delta = 0, $edit = array()) {
         return array(
           'subject' => t('ShareThis'),
           'content' => theme('sharethis', drupal_get_title(), $_GET['q']),
-          'cache' => BLOCK_NO_CACHE, // Don't cache it because it needs to add JavaScript.
         );
       }
     break;
