@@ -1,4 +1,0 @@
-; $Id$
-name = ShareThis
-description = "Implements the ShareThis system created by Alex King into posts."
-core = 6.x
