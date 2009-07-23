@@ -24,7 +24,7 @@
 (function(jQuery) {
   // Create the ShareThis element queue and the ShareThis API URL default.
   jQuery.sharethisQueue = [];
-  jQuery.sharethisUrl = "http://w.sharethis.com/button/sharethis.js#";
+  jQuery.sharethisUrl = "http://w.sharethis.com/button/sharethis.js#ref=drupal";
 
   // The $().sharethis() function.
   jQuery.fn.sharethis = function(sharethisUrl) {
