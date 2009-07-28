@@ -24,7 +24,7 @@
 (function(jQuery) {
   // Create the ShareThis element queue and the ShareThis API URL default.
   jQuery.sharethisQueue = [];
-  jQuery.sharethisUrl = "http://w.sharethis.com/button/sharethis.js#ref=drupal";
+  jQuery.sharethisUrl = "http://w.sharethis.com/button/sharethis.js#ref=jquery";
 
   // The $().sharethis() function.
   jQuery.fn.sharethis = function(sharethisUrl) {
@@ -86,5 +86,5 @@
     });
     // Clear the process queue.
     jQuery.sharethis = [];
-  }
+  };
 })(jQuery);
