@@ -1,4 +1,5 @@
 ; $Id$
 name = ShareThis
-description = "Implements the ShareThis system created by Alex King into posts."
+description = "Provides the ShareThis web service for Service Links."
 core = 6.x
+dependencies[] = service_links
