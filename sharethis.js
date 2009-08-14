@@ -11,8 +11,13 @@ Drupal.behaviors.sharethis = function(context) {
         title: options['title'],
         url: options['url']
       });
-      shared_object.attachButton(document.getElementById(id), {button: false});
-      $('#'+id).click(function() { return false; });
+      if (options['chicklet'] || false) {
+        shared_object.attachChicklet(options['chicklet'], document.getElementById(id));
+      }
+      else {
+        shared_object.attachButton(document.getElementById(id), {button: false});
+      }
+      $('#' + id).click(function() { return false; });
     });
   }
 };

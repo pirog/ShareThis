@@ -34,17 +34,39 @@ function sharethis_menu() {
  * See the Service Links module.
  */
 function sharethis_service_links() {
+  // The main ShareThis button.
   $links['sharethis'] = array(
     'name' => 'ShareThis',
     'description' => t('ShareThis makes sharing easy!'),
     'link' => 'http://sharethis.com/post?url=<encoded-url>&title=<encoded-title>',
-    'icon' => drupal_get_path('module', 'sharethis') .'/' . variable_get('sharethis_icon', 'sharethis.png'),
-    'attributes' => array(
-      'class' => 'sharethis-link-button chicklet',
-    ),
+    'icon' => drupal_get_path('module', 'sharethis') .'/images/' . variable_get('sharethis_icon', 'sharethis.png'),
     'javascript' => drupal_get_path('module', 'sharethis') .'/sharethis.js',
     'callback' => 'sharethis_service_links_callback',
   );
+  // Construct the individual chicklets.
+  $chicklets = array(
+    'email' => array(
+      'name' => 'Email',
+      'description' => t('Send this post to a friend via Email.'),
+    ),
+    'twitter' => array(
+      'name' => 'Twitter',
+      'description' => t('Share this post on Twitter.'),
+    ),
+  );
+  foreach ($chicklets as $name => $chicklet) {
+    $links['sharethis-'. $name] = array(
+      'name' => $chicklet['name'],
+      'description' => $chicklet['description'],
+      'link' => 'http://sharethis.com/post?url=<encoded-url>&title=<encoded-title>',
+      'icon' => drupal_get_path('module', 'sharethis') ."/images/$name.gif",
+      'attributes' => array(
+        'class' => $name,
+      ),
+      'javascript' => drupal_get_path('module', 'sharethis') .'/sharethis.js',
+      'callback' => 'sharethis_service_links_callback',
+    );
+  }
   return $links;
 }
 
@@ -65,12 +87,11 @@ function sharethis_service_links_callback($service, $context) {
     drupal_set_html_head('<script type="text/javascript" src="'. $code .'&amp;button=false"></script>');
   }
   $settings = array(
-    'sharethis' => array(
-      $service['attributes']['id'] => array(
-        'title' => $context['title'],
-        'url' => $context['url'],
-      ),
+    $service['attributes']['id'] => array(
+      'title' => $context['title'],
+      'url' => $context['url'],
+      'chicklet' => isset($service['attributes']['class']) ? $service['attributes']['class'] : FALSE,
     ),
   );
-  drupal_add_js($settings, 'setting');
+  drupal_add_js(array('sharethis' => $settings), 'setting');
 }

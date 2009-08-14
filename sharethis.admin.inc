@@ -24,8 +24,8 @@ function sharethis_admin_settings() {
     '#default_value' => variable_get('sharethis_icon', 'sharethis.png'),
     '#description' => t('The icon to associate with the ShareThis link.'),
     '#options' => array(
-      'sharethis.png' => t('!image Static', array('!image' => theme('image', drupal_get_path('module', 'sharethis') .'/sharethis.png'))),
-      'sharethis-rotating.gif' => t('!image Rotating', array('!image' => theme('image', drupal_get_path('module', 'sharethis') .'/sharethis-rotating.gif'))),
+      'sharethis.png' => t('!image Static', array('!image' => theme('image', drupal_get_path('module', 'sharethis') .'/images/sharethis.png'))),
+      'sharethis-rotating.gif' => t('!image Rotating', array('!image' => theme('image', drupal_get_path('module', 'sharethis') .'/images/sharethis-rotating.gif'))),
     ),
   );
   return system_settings_form($form);
