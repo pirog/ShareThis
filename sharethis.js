@@ -18,6 +18,7 @@ Drupal.behaviors.sharethis = function(context) {
         shared_object.attachButton(document.getElementById(id), {button: false});
       }
       $('#' + id).click(function() { return false; });
+      delete(Drupal.settings.sharethis[id]);
     });
   }
 };
