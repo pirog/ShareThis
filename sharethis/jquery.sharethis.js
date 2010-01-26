@@ -81,7 +81,11 @@
 
         // Create and insert the button.
         var share = SHARETHIS.addEntry(objectProperties, {button: false});
-        element.replaceWith(share.button);
+
+        // For strange reason we need a wrapping span around the link
+        // with the attribute "id" = sharethis_[somenumber], why? don´t as me (anon), ask sharethis crew. 
+        var wrapper = jQuery('<span></span>').attr('id', 'sharethis_'+i);
+        element.wrap(wrapper).replaceWith(share.button);
       });
     });
     // Clear the process queue.
