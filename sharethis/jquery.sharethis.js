@@ -84,7 +84,8 @@
 
         // For strange reason we need a wrapping span around the link
         // with the attribute "id" = sharethis_[somenumber], why? don´t as me (anon), ask sharethis crew. 
-        var wrapper = jQuery('<span></span>').attr('id', 'sharethis_'+i);
+        var a = i + 1;
+        var wrapper = jQuery('<span></span>').attr('id', 'sharethis_'+a);
         element.wrap(wrapper).replaceWith(share.button);
       });
     });
