@@ -1,4 +1,3 @@
-// $Id$
 
 /**
  * The Drupal behaviors for the ShareThis web service.

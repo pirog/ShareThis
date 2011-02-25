@@ -1,4 +1,3 @@
-; $Id$
 name = ShareThis
 description = "Provides the ShareThis web service for Service Links."
 core = 6.x
