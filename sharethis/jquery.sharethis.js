@@ -4,7 +4,6 @@
  * A jQuery Plugin to provide easy use of the ShareThis web
  * service.
  *
- * $Id$
  *
  * Copyright (c) 2009 Rob Loach (http://robloach.net) Dual licensed under the
  * MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
