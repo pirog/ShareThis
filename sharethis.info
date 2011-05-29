@@ -1,5 +1,5 @@
-name = ShareThis
-description = "Provides the ShareThis web service for Service Links."
-core = 6.x
-dependencies[] = service_links
-package = Service Links
+name = ShareThis (Official)
+description = This module adds the <a href="http://sharethis.com/">ShareThis</a> widget to your site.
+core = 7.x
+package = Sharing
+configure = admin/config/sharethis

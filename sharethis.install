@@ -1,0 +1,54 @@
+<?php // $Id$
+/**
+ * @file
+ * This file holds the install information for the ShareThis Module.
+ */
+/**
+ * Implements hook_install().
+ */
+function sharethis_install() {
+  $record = (object) NULL;
+  $record->st_option = "widget";
+  $record->st_value = "5x";
+  drupal_write_record('st_table', &$record);
+
+  $record = (object) NULL;
+  $record->st_option = 'buttons';
+  $record->st_value = '_large';
+  drupal_write_record('st_table', &$record);
+
+  $record = (object) NULL;
+  $record->st_option = 'services';
+  $record->st_value = 'twitter:Tweet,facebook:Share,sharethis:ShareThis,email:Email';
+  drupal_write_record('st_table', &$record);
+}
+
+ /**
+ * Implements hook_schema().
+ *
+ * This defines the database implementation that will be used by the ShareThis module.
+ *
+ */
+function sharethis__official__schema() {
+  $schema['st_table'] = array(
+    'description' => 'A table used by the ShareThis Module', 
+    'fields' => array(
+      'st_option' => array(
+        'description' => 'A ShareThis option', 
+        'type' => 'varchar',  
+        'length' => 100, 
+        'not null' => TRUE, 
+        'default' => '',
+      ), 
+      'st_value' => array(
+        'description' => 'The option value as a string.', 
+        'type' => 'varchar', 
+        'length' => 2000, 
+        'not null' => TRUE, 
+        'default' => '',
+      ), 
+    ), 
+    'primary key' => array('st_option'),
+  );
+  return $schema;
+}
