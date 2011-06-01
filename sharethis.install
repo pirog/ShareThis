@@ -29,7 +29,7 @@ function sharethis_install() {
  * This defines the database implementation that will be used by the ShareThis module.
  *
  */
-function sharethis__official__schema() {
+function sharethis_schema() {
   $schema['st_table'] = array(
     'description' => 'A table used by the ShareThis Module', 
     'fields' => array(
