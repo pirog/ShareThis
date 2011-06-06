@@ -53,25 +53,29 @@
 }
 
 .st_widgetPic {
-	margin:0px;
+	position:absolute;
+	left:206px;
 	display:block;
-	float:right;	
 	background:white;
 	padding:10px;
-	
 	border:1px solid black;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	border-radius: 5px;		
 }
 
 .st_widgetPicContain {
 	display:block;
 	height:285px;
 	overflow:hidden;	
+	
+	border:1px solid #aaaaaa;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;	
 }
 
-.st_multiW .st_widgetPicContain img{
+.st_multi .st_widgetPicContain img{
 	margin-top:-285px;
 }
 
@@ -82,8 +86,9 @@
 }
 
 .st_widgetContain {
-	width:760px;	
+	width:800px;	
 	height:340px;
+	position:relative;
 }
 
 .st_buttonContain {
@@ -199,12 +204,11 @@
 }
 
 .st_buttonSelectImage {
-	position:absolute;
-	left:196px;
+	left:206px;
 	display:block;
 	background:white;
 	padding:10px;
-	border:1px solid black;
+	border:1px solid #aaaaaa;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;		
@@ -218,12 +222,12 @@
 
 .st_spriteCover {
 	position:absolute;
-	left:200px;
+	left:219px;
 	top:100px;
 	display:block;
-	padding:10px;	
+	margin:10px;	
 	overflow:hidden;
-	height:63px;
+	height:73px;
 	width:600px;
 	z-index:5;
 }
@@ -233,7 +237,7 @@
 	width:400px;
 }
 
-.stbc { margin-top: -90px; }
+.stbc_ { margin-top: -90px; }
 .stbc_large { margin-top: -10px; }
 .stbc_hcount { margin-top: -244px; }
 .stbc_vcount { margin-top: -315px; }
