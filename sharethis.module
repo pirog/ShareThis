@@ -67,10 +67,10 @@ function sharethis_form($form, &$form_state) {
   // Create the variables related to services chosen.
   $service_string = $current_options_array['services'];
   $service_string_markup = "";
-  foreach(explode(",", $service_string) as $name => $string) {
+  foreach (explode(",", $service_string) as $name => $string) {
     $key = explode(":", substr($string, 0, -1));
     $key = $key[1];
-	$service_string_markup .= "\"" . $key . "\",";
+    $service_string_markup .= "\"" . $key . "\",";
   }
   $service_string_markup = substr($service_string_markup, 0, -1);
   
@@ -96,56 +96,56 @@ function sharethis_form($form, &$form_state) {
   $form['options']['widget_option'] = array(
     '#options' => array(
       'st_multi' => t("Multi-Post Widget"),
-	  'st_direct' => t("Direct-Post Widget")
-	),
-	'#default_value' => $widget_type,
-	'#type' => 'radios',
+      'st_direct' => t("Direct-Post Widget")
+    ),
+    '#default_value' => $widget_type,
+    '#type' => 'radios',
     '#required' => TRUE,
-	'#title' => t("Choose a widget type:"),
-	'#prefix' => '<div class="st_widgetContain"><div class="st_widgetPic ' . $widget_markup . '"><div class="st_widgetPicContain"><img src="' . $base_url . '/' . $my_path . '/img/widget.png"></img></div></div>',
-	'#suffix' => '</div>'
+    '#title' => t("Choose a widget type:"),
+    '#prefix' => '<div class="st_widgetContain"><div class="st_widgetPic ' . $widget_markup . '"><div class="st_widgetPicContain"><img src="' . $base_url . '/' . $my_path . '/img/widget.png"></img></div></div>',
+    '#suffix' => '</div>'
   );
   $form['options']['button_option'] = array(
     '#required' => TRUE,
-	'#type' => 'radios',
-	'#options' => array(
-	  'stbc_large' => t("Large Chicklets"),
-	  'stbc_' => t("Small Chicklets"),
-	  'stbc_button' => t("Classic Buttons"),
-	  'stbc_vcount' => t("Vertical Counters"),
-	  'stbc_hcount' => t("Horizontal Counters")
-	),
-	'#default_value' => $button_choice,
-	'#title' => t("Choose a button style:"),
-	'#prefix' => '<div class="st_widgetContain"><div class="st_spriteCover"><img id="stb_sprite" class="st_buttonSelectSprite ' . $button_choice . '" src="' . $base_url . '/' . $my_path . '/img/preview_sprite.png"></img></div><div class="st_widgetPic"><img class="st_buttonSelectImage" src="' . $base_url . '/' . $my_path . '/img/preview_bg.png"></img></div>',
-	'#suffix' => '</div>'
+    '#type' => 'radios',
+    '#options' => array(
+      'stbc_large' => t("Large Chicklets"),
+      'stbc_' => t("Small Chicklets"),
+      'stbc_button' => t("Classic Buttons"),
+      'stbc_vcount' => t("Vertical Counters"),
+      'stbc_hcount' => t("Horizontal Counters")
+    ),
+    '#default_value' => $button_choice,
+    '#title' => t("Choose a button style:"),
+    '#prefix' => '<div class="st_widgetContain"><div class="st_spriteCover"><img id="stb_sprite" class="st_buttonSelectSprite ' . $button_choice . '" src="' . $base_url . '/' . $my_path . '/img/preview_sprite.png"></img></div><div class="st_widgetPic"><img class="st_buttonSelectImage" src="' . $base_url . '/' . $my_path . '/img/preview_bg.png"></img></div>',
+    '#suffix' => '</div>'
   );
   $form['options']['teaser_option'] = array(
     '#title' => t("Don't show the buttons in teaser view."),
-	'#type' => 'checkbox',
-	'#default_value' => $teaser ? 1 : 0,
+    '#type' => 'checkbox',
+    '#default_value' => $teaser ? 1 : 0,
   );
   $form['options']['service_option'] = array(
     '#description' => t("<b>Add</b> a service by selecting it on the right and clicking the <i>left arrow</i>.  <b>Remove</b> it by clicking the <i>right arrow</i>.<br /><b>Change the order</b> of services under \"Selected Services\" by using the <i>up</i> and <i>down</i> arrows."),
     '#required' => TRUE,
-	'#type' => 'textfield',
-	'#prefix' => '<div>',
-	'#suffix' => '</div><div id="myPicker"></div><script type="text/javascript">stlib_picker.setupPicker($("#myPicker"), [' . $service_string_markup . '], drupal_st.serviceCallback);</script>',
-	'#title' => t("Choose Your Services."),
-	'#default_value' => t($service_string)
+    '#type' => 'textfield',
+    '#prefix' => '<div>',
+    '#suffix' => '</div><div id="myPicker"></div><script type="text/javascript">stlib_picker.setupPicker($("#myPicker"), [' . $service_string_markup . '], drupal_st.serviceCallback);</script>',
+    '#title' => t("Choose Your Services."),
+    '#default_value' => t($service_string)
   );
   $form['options']['node_option'] = array(
     '#title' => t("Choose the node types you want to show the buttons on."),
     '#required' => TRUE,
-	'#type' => 'checkboxes',
-	'#options' => $node_type_options,
-	'#default_value' => $nodes_selected
+    '#type' => 'checkboxes',
+    '#options' => $node_type_options,
+    '#default_value' => $nodes_selected
   );
   $form['options']['publisherID'] = array(
     '#title' => t("Insert a publisher key (optional)."),
-	'#description' => t("If you don't have a publisher key, go to <a href='http://www.sharethis.com/account'>ShareThis</a> and get one.<br />It can be found under 'My Account'.<br />It allows you to get detailed analytics about sharing done on your site."),
-	'#type' => 'textfield',
-	'#default_value' => $publisher
+    '#description' => t("If you don't have a publisher key, go to <a href='http://www.sharethis.com/account'>ShareThis</a> and get one.<br />It can be found under 'My Account'.<br />It allows you to get detailed analytics about sharing done on your site."),
+    '#type' => 'textfield',
+    '#default_value' => $publisher
   );
   $form['options']['submit'] = array(
     '#type' => 'submit', 
@@ -168,16 +168,16 @@ function sharethis_form_submit($form, &$form_state) {
   
   // Record the buttons option.
   if (isset($form_state['input']['button_option'])) {
-	$record = (object) NULL;
-	$record->st_option = "buttons";
-	$record->st_value = $form_state['input']['button_option']; 
-	drupal_write_record('st_table', &$record, 'st_option'); 
+    $record = (object) NULL;
+    $record->st_option = "buttons";
+    $record->st_value = $form_state['input']['button_option']; 
+    drupal_write_record('st_table', &$record, 'st_option'); 
   }
   // Record the services option.
   if (isset($form_state['input']['service_option'])) {
-	$record = (object) NULL;
-	$record->st_option = "services";
-	$sanitized = $form_state['input']['service_option'];
+    $record = (object) NULL;
+    $record->st_option = "services";
+    $sanitized = $form_state['input']['service_option'];
     $sanitized = str_replace(";", "", $sanitized);
     $sanitized = str_replace("\\", "", $sanitized);
     $sanitized = str_replace("/", "", $sanitized);
@@ -189,14 +189,14 @@ function sharethis_form_submit($form, &$form_state) {
   
   // Record the NodeType option.
   if (isset($form_state['input']['node_option'])) {
-	$record = (object) NULL;
-	$record->st_option = "nodeType";
-	$node_string = "";
-	foreach ($form_state['input']['node_option'] as $k => $v) {
-	  $node_string .= $v . ",";
-	}
-	$record->st_value = substr($node_string, 0, -1); 
-	drupal_write_record('st_table', &$record, 'st_option');
+    $record = (object) NULL;
+    $record->st_option = "nodeType";
+    $node_string = "";
+    foreach ($form_state['input']['node_option'] as $k => $v) {
+      $node_string .= $v . ",";
+    }
+    $record->st_value = substr($node_string, 0, -1); 
+    drupal_write_record('st_table', &$record, 'st_option');
   }  
   
   // Record the teaser option.
@@ -205,7 +205,8 @@ function sharethis_form_submit($form, &$form_state) {
     $record->st_option = "viewMode";
     $record->st_value = $form_state['input']['teaser_option']; 
     drupal_write_record('st_table', &$record, 'st_option');
-  } else {
+  } 
+  else {
     $record = (object) NULL;
     $record->st_option = "viewMode";
     $record->st_value = "0"; 
@@ -227,7 +228,7 @@ function sharethis_form_submit($form, &$form_state) {
     drupal_write_record('st_table', &$record, 'st_option');
   }
  
-  drupal_set_message("Thank you! Your preferences have been saved.");
+  drupal_set_message(t("Thank you! Your preferences have been saved."));
 }
  
  /**
@@ -266,9 +267,6 @@ function sharethis_menu() {
  */
 function sharethis_node_view($node, $view_mode, $langcode) {
 
-	//$node->type, also $view_mode to set which nodes to place on.
-	//publisherID ->
-	
   // First get all of the options for the sharethis widget from the database:
   $data_options = get_options_array();
   
@@ -293,43 +291,44 @@ function sharethis_node_view($node, $view_mode, $langcode) {
   $mTitle = $node->title;
   
   // Only display the ShareThis buttons if this node fits all the requirements
-  if (strpos($data_options['nodeType'], $node->type) !== false) { // Make sure this is the right type of node.
-	if (($data_options['viewMode'] == "1") && ($view_mode == "teaser")) { // If "don't show for teaser" is enabled, and this is a teaser, don't do anything
-	  // Do nothing.
-	} else {
-	  // Create the code for chicklets.
-	  
-	  // The share buttons are simply spans of the form class='st_SERVICE_BUTTONTYPE' -- "st" stands for ShareThis.
+  if (strpos($data_options['nodeType'], $node->type) !== FALSE) { // Make sure this is the right type of node.
+    if (($data_options['viewMode'] == "1") && ($view_mode == "teaser")) { // If "don't show for teaser" is enabled, and this is a teaser, don't do anything
+      // Do nothing.
+    } 
+    else {
+      // Create the code for chicklets.
+  
+      // The share buttons are simply spans of the form class='st_SERVICE_BUTTONTYPE' -- "st" stands for ShareThis.
       $type = substr($data_options['buttons'], 4);
       $type = $type == "_" ? "" : $type;
       $service_array = explode(",", $data_options['services']);
       $st_spans = "";
       for ($i=0; $i<sizeof($service_array); $i++) {
-	    //Strip the quotes from the element in the array (They are there for javascript)
-	    $service = explode(":", $service_array[$i]);
+        // Strip the quotes from the element in the array (They are there for javascript)
+        $service = explode(":", $service_array[$i]);
         $serviceCodeName = substr($service[1], 0, -1);
         $display = "displaytext=";
         $display .= $service[0] . "\"";
         $display = ($type == "") ? "" : $display;
         $st_spans .= "<span st_url=$mPath st_title='$mTitle' class='st_$serviceCodeName$type' $display></span>";
       }
-	  
-	  // These are the ShareThis scripts:
+  
+      // These are the ShareThis scripts:
       // If switchTo5x is set to false, then the "classic" widget will be selected.
-	  $is_five = $data_options['widget'] == 'st_multi' ? 'true' : 'false';
-	  $publisher_id = $data_options['publisherID'];
+      $is_five = $data_options['widget'] == 'st_multi' ? 'true' : 'false';
+      $publisher_id = $data_options['publisherID'];
       $st_js = "<script type='text/javascript'>var switchTo5x=$is_five;</script>
         <script type='text/javascript' src='http://w.sharethis.com/button/buttons.js'></script>
-  	    <script type='text/javascript'>stLight.options({publisher:'$publisher_id'});</script>";
-		
-	  // This puts the buttons on the node and adds the necessary scripts.
+        <script type='text/javascript'>stLight.options({publisher:'$publisher_id'});</script>";
+
+      // This puts the buttons on the node and adds the necessary scripts.
       // You can change the weight to change whether the buttons are near the top or bottom of the node.
       // Default is at the bottom:
-	  $node->content['my_additional_field'] = array(
+      $node->content['my_additional_field'] = array(
         '#markup' => $st_spans . $st_js, 
         '#weight' => 10
       );
-	}
+    }
   }
 }
 
