@@ -10,32 +10,32 @@ function sharethis_install() {
   $record = (object) NULL;
   $record->st_option = "widget";
   $record->st_value = "st_multi";
-  drupal_write_record('st_table', &$record);
+  drupal_write_record('st_table', $record);
 
   $record = (object) NULL;
   $record->st_option = 'buttons';
   $record->st_value = 'stbc_large';
-  drupal_write_record('st_table', &$record);
+  drupal_write_record('st_table', $record);
 
   $record = (object) NULL;
   $record->st_option = 'services';
   $record->st_value = '"Tweet:twitter","Facebook:facebook","ShareThis:sharethis"';
-  drupal_write_record('st_table', &$record);
+  drupal_write_record('st_table', $record);
   
   $record = (object) NULL;
   $record->st_option = 'nodeType';
   $record->st_value = 'page,article';
-  drupal_write_record('st_table', &$record);
+  drupal_write_record('st_table', $record);
   
   $record = (object) NULL;
   $record->st_option = 'viewMode';
   $record->st_value = '0';
-  drupal_write_record('st_table', &$record);
+  drupal_write_record('st_table', $record);
   
   $record = (object) NULL;
   $record->st_option = 'publisherID';
   $record->st_value = '';
-  drupal_write_record('st_table', &$record);
+  drupal_write_record('st_table', $record);
 }
 
  /**

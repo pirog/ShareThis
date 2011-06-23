@@ -163,7 +163,7 @@ function sharethis_form_submit($form, &$form_state) {
     $record = (object) NULL;
     $record->st_option = "widget";
     $record->st_value = $form_state['input']['widget_option']; 
-    drupal_write_record('st_table', &$record, 'st_option');
+    drupal_write_record('st_table', $record, 'st_option');
   }
   
   // Record the buttons option.
@@ -171,7 +171,7 @@ function sharethis_form_submit($form, &$form_state) {
     $record = (object) NULL;
     $record->st_option = "buttons";
     $record->st_value = $form_state['input']['button_option']; 
-    drupal_write_record('st_table', &$record, 'st_option'); 
+    drupal_write_record('st_table', $record, 'st_option'); 
   }
   // Record the services option.
   if (isset($form_state['input']['service_option'])) {
@@ -184,7 +184,7 @@ function sharethis_form_submit($form, &$form_state) {
     $sanitized = str_replace("(", "", $sanitized);
     $sanitized = str_replace(")", "", $sanitized);
     $record->st_value = $sanitized; 
-    drupal_write_record('st_table', &$record, 'st_option');
+    drupal_write_record('st_table', $record, 'st_option');
   }
   
   // Record the NodeType option.
@@ -196,7 +196,7 @@ function sharethis_form_submit($form, &$form_state) {
       $node_string .= $v . ",";
     }
     $record->st_value = substr($node_string, 0, -1); 
-    drupal_write_record('st_table', &$record, 'st_option');
+    drupal_write_record('st_table', $record, 'st_option');
   }  
   
   // Record the teaser option.
@@ -204,13 +204,13 @@ function sharethis_form_submit($form, &$form_state) {
     $record = (object) NULL;
     $record->st_option = "viewMode";
     $record->st_value = $form_state['input']['teaser_option']; 
-    drupal_write_record('st_table', &$record, 'st_option');
+    drupal_write_record('st_table', $record, 'st_option');
   } 
   else {
     $record = (object) NULL;
     $record->st_option = "viewMode";
     $record->st_value = "0"; 
-    drupal_write_record('st_table', &$record, 'st_option');
+    drupal_write_record('st_table', $record, 'st_option');
   }
   
   // Record the publisher ID option.  Since it's a text field, remove anything that resembles code
@@ -225,7 +225,7 @@ function sharethis_form_submit($form, &$form_state) {
     $sanitized = str_replace("(", "", $sanitized);
     $sanitized = str_replace(")", "", $sanitized);
     $record->st_value = $sanitized; 
-    drupal_write_record('st_table', &$record, 'st_option');
+    drupal_write_record('st_table', $record, 'st_option');
   }
  
   drupal_set_message(t("Thank you! Your preferences have been saved."));
@@ -359,7 +359,7 @@ function sharethis_DB_update($form, &$form_state) {
     $record = (object) NULL;
     $record->st_option = $k;
     $record->st_value = $v; 
-    drupal_write_record('st_table', &$record, 'st_option'); 
+    drupal_write_record('st_table', $record, 'st_option'); 
   }
   echo "<p>" . t("Changes have been successfully saved!") . "</p>";
   
