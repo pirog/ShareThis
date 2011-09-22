@@ -270,7 +270,10 @@ function sharethis_menu() {
  *   Information about the language
  */
 function sharethis_node_view($node, $view_mode, $langcode) {
-
+  // Don't display if searched
+  if ($view_mode == 'search_result' || $view_mode == 'search_index') {
+    return;
+  }
   // First get all of the options for the sharethis widget from the database:
   $data_options = get_options_array();
   
@@ -289,6 +292,13 @@ function sharethis_node_view($node, $view_mode, $langcode) {
   else {
     $path_module = "/node/" . $node->nid;
   }
+
+  // Pathauto integration !
+  if (module_exists('pathauto')) {
+    $path_module ='/';
+    $path_module .= drupal_lookup_path('alias',"node/".$node->nid);
+  }
+
   global $base_url;
   // Get the full path to insert into the Share Buttons.
   $mPath = $base_url . $path_module;
