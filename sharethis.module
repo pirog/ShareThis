@@ -140,7 +140,6 @@ function sharethis_form($form, &$form_state) {
   );
   $form['options']['node_option'] = array(
     '#title' => t("Choose the node types you want to show the buttons on."),
-    '#required' => TRUE,
     '#type' => 'checkboxes',
     '#options' => $node_type_options,
     '#default_value' => $nodes_selected
@@ -201,7 +200,12 @@ function sharethis_form_submit($form, &$form_state) {
     }
     $record->st_value = substr($node_string, 0, -1); 
     drupal_write_record('st_table', $record, 'st_option');
-  }  
+  } else {
+    $record = (object) NULL;
+    $record->st_option = "nodeType";
+    $record->st_value = "";
+	drupal_write_record('st_table', $record, 'st_option');
+  }
   
   // Record the teaser option.
   if (isset($form_state['input']['teaser_option'])) {
