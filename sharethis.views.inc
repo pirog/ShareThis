@@ -1,4 +1,5 @@
 <?php
+// $Id: sharethis.views.inc,v 1.1.2.3 2009/08/14 03:52:42 robloach Exp $
 /**
  * @file
  * Views integration for sharethis.
@@ -25,6 +26,9 @@ function sharethis_views_data() {
  */
 function sharethis_views_handlers() {
   return array(
+    'info' => array(
+          'path' => drupal_get_path('module', 'sharethis') .'/includes/views',
+    ),
     'handlers' => array(
       'sharethis_handler_link' => array(
         'parent' => 'views_handler_field_node_link',

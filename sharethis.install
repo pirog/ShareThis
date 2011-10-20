@@ -1,0 +1,161 @@
+<?php // $Id$
+/**
+ * @file
+ * This file holds the install information for the ShareThis Module.
+ */
+/**
+ * Implements hook_install().
+ */
+function sharethis_install() {
+  drupal_install_schema('sharethis');
+
+  $defaults = array();
+
+  $defaults[] = array(
+    'st_option' => 'widget',
+    'st_value' => 'st_multi',
+  );
+  $defaults[] = array(
+    'st_option' => 'buttons',
+    'st_value' => 'stbc_large',
+  );
+  $defaults[] = array(
+    'st_option' => 'services',
+    'st_value' => '"Tweet:twitter","Facebook:facebook","ShareThis:sharethis"',
+  );
+  $defaults[] = array(
+    'st_option' => 'nodeType',
+    'st_value' => 'page,article',
+  );
+  $defaults[] = array(
+    'st_option' => 'viewMode',
+    'st_value' => '0',
+  );
+  $defaults[] = array(
+    'st_option' => 'publisherID',
+    'st_value' => '',
+  );
+  $defaults[] = array(
+      'st_option' => 'weight',
+      'st_value' => '10',
+  );
+
+  foreach ($defaults as $value) {
+      db_query('INSERT INTO {st_table} VALUES ("%s", "%s")', $value['st_option'], $value['st_value']);
+    }
+  }
+  
+/**
+ * Implements hook_uninstall().
+ */
+function sharethis_uninstall() {
+  drupal_uninstall_schema('sharethis');
+}
+
+
+ /**
+ * Implements hook_schema().
+ *
+ * This defines the database implementation that will be used by the ShareThis module.
+ *
+ */
+function sharethis_schema() {
+  $schema['st_table'] = array(
+    'description' => 'A table used by the ShareThis Module',
+    'fields' => array(
+      'st_option' => array(
+        'description' => 'A ShareThis option',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ), 
+      'st_value' => array(
+        'description' => 'The option value as a string.',
+        'type' => 'varchar',
+        'length' => 2000,
+        'not null' => TRUE,
+        'default' => '',
+      ), 
+    ), 
+    'primary key' => array('st_option'),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_update_N.
+ *
+ * Import variables from 6.x-1.x.
+ */
+function sharethis_update_6300(&$sandbox) {
+  $ret = drupal_install_schema('sharethis');
+
+  // Salvage usable variables.
+  // TODO Regex publisherId from ShareThis code variable?
+  $teaser = variable_get('sharethis_teaser', 0);
+  $node_types = variable_get('sharethis_sharethis_this_node_types', array());
+
+  $defaults = array();
+
+  $defaults[] = array(
+    'st_option' => 'widget',
+    'st_value' => 'st_multi',
+  );
+  $defaults[] = array(
+    'st_option' => 'buttons',
+    'st_value' => 'stbc_large',
+  );
+  $defaults[] = array(
+    'st_option' => 'services',
+    'st_value' => '"Tweet:twitter","Facebook:facebook","ShareThis:sharethis"',
+  );
+  $defaults[] = array(
+    'st_option' => 'nodeType',
+    'st_value' => db_escape_string(implode(',', array_filter($node_types))),
+  );
+  $defaults[] = array(
+    'st_option' => 'viewMode',
+    'st_value' => $teaser === 0 ? '1' : '0',
+  );
+  $defaults[] = array(
+    'st_option' => 'publisherID',
+    'st_value' => '',
+  );
+
+  foreach ($defaults as $value) {
+    $st_option = $value['st_option'];
+    $st_value = $value['st_value'];
+    $ret[] = update_sql("INSERT INTO {st_table} VALUES ('$st_option', '$st_value')");
+  }
+  
+  // Delete all variables.
+  db_query('DELETE FROM {variable} WHERE name LIKE "sharethis_%"');
+
+  return $ret;
+}
+
+/**
+* Implements hook_update_N.
+*
+* add weight key
+*/
+function sharethis_update_6400(&$sandbox) {
+  $defaults = array();
+
+  $defaults[] = array(
+    'st_option' => 'weight',
+    'st_value' => '10',
+  );
+
+  foreach ($defaults as $value) {
+    $st_option = $value['st_option'];
+    $st_value = $value['st_value'];
+    $ret[] = update_sql("INSERT INTO {st_table} VALUES ('$st_option', '$st_value')");
+  }
+
+  // Delete all variables.
+  db_query('DELETE FROM {variable} WHERE name LIKE "sharethis_%"');
+
+  return $ret;
+}
