@@ -35,7 +35,7 @@ function sharethis_help($path, $arg) {
 /**
  * Implements hook_permission().
  */
-function sharethis_permission() {
+function sharethis_perm() {
   return array(
     'administer sharethis'
   );
